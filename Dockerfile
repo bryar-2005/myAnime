@@ -45,7 +45,8 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Copy and set up the entrypoint script
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh && \
+    sed -i 's/\r$//' /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
 
