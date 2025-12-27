@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/1000/svg">
+  <!-- Hat Base -->
+  <path d="M60 380C60 380 120 440 256 440C392 440 452 380 452 380C452 380 430 340 256 340C82 340 60 380 60 380Z" fill="#F4D03F"/>
+  <!-- Hat Top -->
+  <path d="M150 350C150 200 200 120 256 120C312 120 362 200 362 350" fill="#F4D03F" stroke="#B7950B" stroke-width="10"/>
+  <!-- Red Ribbon -->
+  <path d="M155 330C155 330 200 310 256 310C312 310 357 330 357 330L360 360C360 360 312 340 256 340C200 340 152 360 152 360L155 330Z" fill="#E74C3C"/>
+  <!-- Stylized M (MyAnime) -->
+  <path d="M220 220L256 260L292 220" stroke="#1B2631" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+</svg>

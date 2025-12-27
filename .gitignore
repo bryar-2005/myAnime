@@ -1,0 +1,10 @@
+# Root .gitignore
+/node_modules
+/backend/vendor
+/backend/.env
+/frontend/dist
+/.vscode
+/.idea
+/db_data
+.DS_Store
+*.log

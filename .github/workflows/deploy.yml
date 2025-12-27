@@ -1,0 +1,33 @@
+name: Deploy MyAnime
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build and Push Docker Image
+      run: |
+        # This is a template. You would typically push to Docker Hub or GHCR.
+        # docker build -t your-username/myanime-app .
+        # echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        # docker push your-username/myanime-app
+        echo "Building Docker image..."
+        docker build -t myanime-app .
+
+    - name: Deploy to Server via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          cd ~/myAnime
+          git pull origin main
+          docker-compose -f docker-compose.prod.yml up -d --build
+          docker-compose -f docker-compose.prod.yml exec -T app php artisan migrate --force
+          docker-compose -f docker-compose.prod.yml exec -T app php artisan config:cache

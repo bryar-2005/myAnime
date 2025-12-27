@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myanime_app
+    restart: always
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+    volumes:
+      - ./backend/storage:/var/www/html/storage
+    networks:
+      - myanime_network
+
+  db:
+    image: mariadb:10.6
+    container_name: myanime_db
+    restart: always
+    environment:
+      - MYSQL_DATABASE=myanime
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./db_data:/var/lib/mysql
+    networks:
+      - myanime_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: myanime_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - app
+    networks:
+      - myanime_network
+
+networks:
+  myanime_network:
+    driver: bridge
