@@ -7,21 +7,23 @@ COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Build Backend
-FROM php:8.2-fpm-alpine
+FROM php:8.2-apache
 WORKDIR /var/www/html
 
 # Install system dependencies
-RUN apk add --no-cache \
-    curl \
+RUN apt-get update && apt-get install -y \
     libpng-dev \
     libxml2-dev \
     zip \
     unzip \
     git \
-    oniguruma-dev
+    libonig-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring gd
+
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -30,11 +32,18 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY backend/ .
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy built frontend from Stage 1 to backend's public folder (or serve separately)
-COPY --from=frontend-builder /app/frontend/dist ./public/frontend
+# Copy built frontend from Stage 1 to backend's public folder
+COPY --from=frontend-builder /app/frontend/dist ./public
+
+# Configure Apache
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+RUN sed -ri -e 's!/var/www/php!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Set permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 9000
-CMD ["php-fpm"]
+# Allow Apache to listen on Railway's dynamic port
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
+EXPOSE 80
