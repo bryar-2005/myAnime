@@ -43,7 +43,10 @@ RUN sed -ri -e 's!/var/www/php!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.c
 # Set permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Allow Apache to listen on Railway's dynamic port
-RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+# Copy and set up the entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
+
+ENTRYPOINT ["entrypoint.sh"]
