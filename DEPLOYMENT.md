@@ -2,10 +2,16 @@
 
 This guide describes how to deploy the MyAnime application to a production server using Docker.
 
-## Prerequisites
-- A Linux server (recommended: Ubuntu 22.04+)
-- Docker & Docker Compose installed
-- A domain name pointing to your server IP
+## Hosting Options
+- **Railway.app (Recommended)**: Automatic deployment from GitHub.
+- **VPS (DigitalOcean/Hetzner)**: Manual setup with Docker Compose.
+
+## Option A: Deploying on Railway.app (Easiest)
+1. Login to [Railway.app](https://railway.app) using GitHub.
+2. **New Project** -> **Deploy from GitHub repo** -> Select `myAnime`.
+3. Add a **MySQL** service to the project.
+4. Copy the `MYSQL_URL` from the database variables to your App's variables as `DATABASE_URL`.
+5. Railway will automatically build and deploy your site!
 
 ## Step 1: Clone and Environment Setup
 1. Clone your repository: `git clone <your-repo-url>`
