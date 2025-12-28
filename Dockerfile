@@ -24,6 +24,7 @@ RUN docker-php-ext-install pdo_mysql mbstring gd
 
 # Force Apache to use mpm_prefork (required for PHP) and avoid conflicts
 RUN a2dismod mpm_event mpm_worker || true && \
+    rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* && \
     a2enmod mpm_prefork && \
     a2enmod rewrite
 

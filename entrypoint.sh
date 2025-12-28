@@ -8,6 +8,10 @@ php artisan storage:link --force || true
 echo "Running migrations..."
 php artisan migrate --force
 
+echo "Cleaning up Apache MPM modules..."
+rm -f /etc/apache2/mods-enabled/mpm_event.*
+rm -f /etc/apache2/mods-enabled/mpm_worker.*
+
 echo "Checking loaded Apache modules..."
 apache2ctl -M | grep mpm || true
 
