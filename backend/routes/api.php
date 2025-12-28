@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/token', [AuthController::class, 'token']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 
+// --- TEMPORARY SECRET ROUTE (API) ---
+// Visit https://your-site/api/seed-now to fill the database
+Route::get('/seed-now', function () {
+    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    return response()->json(['message' => 'Database has been seeded! You can now go to the homepage.']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
