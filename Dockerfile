@@ -22,8 +22,8 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring gd
 
-# Enable Apache mod_rewrite and fix MPM conflict
-RUN a2dismod mpm_event || true && \
+# Force Apache to use mpm_prefork (required for PHP) and avoid conflicts
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf && \
     a2enmod mpm_prefork && \
     a2enmod rewrite
 
