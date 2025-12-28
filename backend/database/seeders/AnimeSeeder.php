@@ -19,6 +19,7 @@ class AnimeSeeder extends Seeder
             return [$name => Genre::firstOrCreate(['slug' => Str::slug($name)], ['name' => $name])];
         });
 
+        // Fix: Use 'name' to find the studio to avoid duplicate errors
         $studio = Studio::firstOrCreate(['name' => 'Kyoto Animation'], ['slug' => 'kyoto-animation']);
 
         $anime = Anime::firstOrCreate(
