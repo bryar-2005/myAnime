@@ -38,7 +38,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        if (!config('auth.allow_signup', env('ALLOW_SIGNUP', false))) {
+        if (!config('auth.allow_signup', env('ALLOW_SIGNUP', true))) {
             return response()->json(['message' => 'Sign up is disabled'], 403);
         }
 
