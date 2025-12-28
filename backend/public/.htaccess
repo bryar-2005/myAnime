@@ -2,6 +2,9 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
+    
+    # Prioritize the React Frontend
+    DirectoryIndex index.html index.php
 
     RewriteEngine On
 
