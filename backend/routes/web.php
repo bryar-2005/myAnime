@@ -19,6 +19,13 @@ Route::get('/', function () {
     return File::get(public_path('index.html'));
 });
 
+// --- TEMPORARY SECRET ROUTE ---
+// Visit https://your-site/seed-now to fill the database
+Route::get('/seed-now', function () {
+    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    return 'Database has been seeded! You can now go to the homepage.';
+});
+
 // Optional: specific fallback for other non-API routes if needed
 Route::fallback(function () {
     return File::get(public_path('index.html'));
