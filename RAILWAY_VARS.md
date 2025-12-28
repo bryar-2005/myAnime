@@ -1,22 +1,28 @@
-# Railway Environment Variables
+# Railway Environment Variables Guide
 
-Copy these keys into the **Variables** tab of your **myAnime** service on Railway.
+To make your website work, you need to handle two different parts in your Railway dashboard.
 
-### 📋 Required Keys
+---
 
-| Key | Value (Example) | Description |
-| :--- | :--- | :--- |
-| `APP_ENV` | `production` | Set to production mode |
-| `APP_DEBUG` | `false` | Disable debug mode for security |
-| `APP_KEY` | `base64:YOUR_GENERATED_KEY` | Run `php artisan key:generate --show` locally to get one |
-| `APP_URL` | `https://your-app-name.up.railway.app` | Your Railway public URL |
-| `VITE_API_URL` | `https://your-app-name.up.railway.app/api` | Your public URL followed by /api |
-| `ALLOW_SIGNUP` | `false` | Set to `true` if you want to allow new users |
+## Part 1: The MySQL Service (The Database)
+**You do NOT need to write anything here.**
+Railway automatically generates these variables for you. Just click on the **MySQL** box and go to the **Variables** tab to see them. You will see things like:
+- `MYSQLHOST`
+- `MYSQLPASSWORD`
+- `MYSQLPORT`
+- `MYSQLUSER`
+- `MYSQLDATABASE`
 
-### 🗄️ Database Connection
-Railway automatically provides some database variables when you add a MySQL service. You should link them or add these:
+---
 
-| Key | Value |
+## Part 2: The `myAnime` Service (The Website)
+**This is where you MUST add the variables.**
+Click on your **`myAnime`** box, go to the **Variables** tab, and add these one by one:
+
+### 🔗 Connecting to the Database
+Copy these exactly. The `${{...}}` parts tell Railway to "link" to your MySQL service automatically.
+
+| Variable Name | Value (Copy & Paste) |
 | :--- | :--- |
 | `DB_CONNECTION` | `mysql` |
 | `DB_HOST` | `${{MySQL.MYSQLHOST}}` |
@@ -25,11 +31,21 @@ Railway automatically provides some database variables when you add a MySQL serv
 | `DB_USERNAME` | `${{MySQL.MYSQLUSER}}` |
 | `DB_PASSWORD` | `${{MySQL.MYSQLPASSWORD}}` |
 
-> [!TIP]
-> In Railway, you can use the `${{...}}` syntax to automatically pull the values from your MySQL service. This way, if the password changes, your app will still work!
+### ⚙️ Website Configuration
+| Variable Name | Value |
+| :--- | :--- |
+| `APP_ENV` | `production` |
+| `APP_DEBUG` | `false` |
+| `APP_KEY` | `base64:sy+1VNXJ32rA2lXxdMtr/0SEW9ENQpIi7CXgHFEGqBI=` |
+| `APP_URL` | `https://your-public-link.up.railway.app` |
+| `VITE_API_URL` | `https://your-public-link.up.railway.app/api` |
+| `ALLOW_SIGNUP` | `false` |
 
-### 🛠️ Final Steps
-After adding these variables, Railway will redeploy your app. Once it finishes:
-1. Go to the **Settings** tab of your app.
-2. Under **Deployments**, look for **"Post-Deploy Command"** or use the **"Terminal"** tab.
-3. Run: `php artisan migrate --force` to set up your tables.
+---
+
+## Final Step: Database Setup
+After adding the variables above:
+1. Go to **Settings** tab of the `myAnime` service.
+2. Scroll to **Deployments** -> **Post-Deploy Command**.
+3. Enter: `php artisan migrate --seed --force`
+4. Click **Update**.
