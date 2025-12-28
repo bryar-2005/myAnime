@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install pdo_mysql mbstring gd
 
 # Force Apache to use mpm_prefork (required for PHP) and avoid conflicts
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf && \
+RUN a2dismod mpm_event mpm_worker || true && \
     a2enmod mpm_prefork && \
     a2enmod rewrite
 

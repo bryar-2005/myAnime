@@ -8,6 +8,9 @@ php artisan storage:link --force || true
 echo "Running migrations..."
 php artisan migrate --force
 
+echo "Checking loaded Apache modules..."
+apache2ctl -M | grep mpm || true
+
 # Use the port provided by Railway (e.g. 8080) or default to 80
 PORT_NUMBER=${PORT:-80}
 echo "Starting Apache on port $PORT_NUMBER..."
